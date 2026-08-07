@@ -48,7 +48,7 @@ npm run build
 
 ## GitHub Pagesへの公開
 
-`master` ブランチへpushすると、`.github/workflows/deploy.yml` が次の処理を実行します。
+`main` ブランチへpushすると、`.github/workflows/deploy.yml` が次の処理を実行します。
 
 1. 依存関係を固定バージョンでインストールする。
 2. プライバシー検査を含むテストを実行する。

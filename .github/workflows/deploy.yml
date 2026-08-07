@@ -2,7 +2,7 @@ name: GitHub Pages へデプロイ
 
 on:
   push:
-    branches: ['master']
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
