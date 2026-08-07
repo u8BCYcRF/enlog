@@ -267,7 +267,6 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
   const costSummary = useMemo(() => summarizeCosts(data.costs), [data.costs])
   const sortedTimeline = useMemo(() => sortByDate(data.timeline), [data.timeline])
   const latestEntry = sortedTimeline[0]
-  const activityStart = data.timeline.find((entry) => entry.phase === '活動開始')
   const latestRecordedDay = latestEntry?.daysFromActivityStart ?? 0
   const offerEntries = data.timeline.filter((entry) => entry.phase === '申し受け')
   const pendingOfferCount = offerEntries.filter((entry) => entry.status === '保留').length
@@ -355,14 +354,41 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
               準備から出会いまで、今の位置と積み重ねを静かに見渡すための活動ダッシュボード。
             </p>
           </div>
-          <div className="day-card">
-            <span>ACTIVITY DAY</span>
-            <strong>{String(latestRecordedDay).padStart(2, '0')}</strong>
-            <p>
-              {activityStart ? formatFullDate(activityStart.date) : '—'} 開始
-            </p>
-            <div className="day-card-orbit" aria-hidden="true" />
-          </div>
+          <article className="hero-cost-card" aria-label="記録済みの費用総額">
+            <div className="hero-cost-heading">
+              <div>
+                <span className="hero-cost-icon"><AppIcon name="coin" /></span>
+                <p>TOTAL INVESTMENT</p>
+              </div>
+              <span className="hero-day-pill">
+                DAY <strong>{String(latestRecordedDay).padStart(2, '0')}</strong>
+              </span>
+            </div>
+
+            <div className="hero-cost-main">
+              <p>これまでの総支出</p>
+              <strong>{formatYen(costTotal)}</strong>
+              <span>婚活直接費＋自己投資</span>
+            </div>
+
+            <div className="hero-cost-breakdown">
+              <div>
+                <span>婚活直接費</span>
+                <strong>{formatYen(costSummary.direct)}</strong>
+              </div>
+              <div>
+                <span>自己投資</span>
+                <strong>{formatYen(costSummary.selfInvestment)}</strong>
+              </div>
+            </div>
+
+            <div className="hero-cost-footer">
+              <span>金額未確定 {costSummary.unknownCount}件を除く</span>
+              <a href="#costs">
+                内訳を見る <AppIcon name="arrow" />
+              </a>
+            </div>
+          </article>
         </section>
 
         <section className="metrics-grid" aria-label="現在の概要">
