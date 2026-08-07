@@ -133,9 +133,10 @@ async function fetchText(path: string, signal?: AbortSignal): Promise<string> {
 export async function loadDashboardData(
   signal?: AbortSignal,
 ): Promise<DashboardData> {
+  const dataBasePath = `${import.meta.env.BASE_URL}data`
   const [timelineSource, costsSource] = await Promise.all([
-    fetchText('/data/timeline.tsv', signal),
-    fetchText('/data/costs.tsv', signal),
+    fetchText(`${dataBasePath}/timeline.tsv`, signal),
+    fetchText(`${dataBasePath}/costs.tsv`, signal),
   ])
 
   return {

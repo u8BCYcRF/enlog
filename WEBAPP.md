@@ -45,3 +45,21 @@ npm run dev
 npm test
 npm run build
 ```
+
+## GitHub Pagesへの公開
+
+`master` ブランチへpushすると、`.github/workflows/deploy.yml` が次の処理を実行します。
+
+1. 依存関係を固定バージョンでインストールする。
+2. プライバシー検査を含むテストを実行する。
+3. `/enlog/` 配下で動作する静的ファイルをビルドする。
+4. 公開承認済みの `data/timeline.tsv` と `data/costs.tsv` だけを成果物へ配置する。
+5. GitHub Pagesへデプロイする。
+
+初回のみ、GitHubリポジトリの `Settings` → `Pages` → `Build and deployment` で、`Source` を `GitHub Actions` に設定します。公開URLは次の形式です。
+
+```text
+https://<GitHubユーザー名>.github.io/enlog/
+```
+
+公開前の検査が失敗した場合、デプロイは実行されません。ローカルのDocker版は従来どおり `http://localhost:4173/` で動作し、GitHub Pages用の変更による影響はありません。
