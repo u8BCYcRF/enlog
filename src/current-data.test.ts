@@ -19,10 +19,10 @@ describe('current Enlog data', () => {
 
   it('calculates current cost scopes without double counting', () => {
     expect(summarizeCosts(parseCosts(costsSource))).toEqual({
-      direct: 156850,
+      direct: 157450,
       selfInvestment: 393090,
       excluded: 2510,
-      unknownCount: 2,
+      unknownCount: 1,
       recurringUnitPrice: 18700,
     })
   })
