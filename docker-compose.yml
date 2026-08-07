@@ -1,0 +1,16 @@
+services:
+  viewer:
+    build:
+      context: .
+    container_name: enlog-viewer
+    ports:
+      - "127.0.0.1:${ENLOG_PORT:-4173}:80"
+    volumes:
+      - ./data:/usr/share/nginx/html/data:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
