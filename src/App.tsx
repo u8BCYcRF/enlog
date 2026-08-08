@@ -437,7 +437,7 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
                   <div className="attention-note">
                     <span aria-hidden="true">!</span>
                     <p>
-                      初めての申し受けが保留中です。完了情報が記録されるまでは、現在の状態を維持します。
+                      {pendingOfferCount}件の申し受けが保留中です。完了情報が記録されるまでは、現在の状態を維持します。
                     </p>
                   </div>
                 )}

@@ -13,7 +13,7 @@ const costsSource = readFileSync(
 
 describe('current Enlog data', () => {
   it('loads every current timeline and cost record', () => {
-    expect(parseTimeline(timelineSource)).toHaveLength(8)
+    expect(parseTimeline(timelineSource)).toHaveLength(9)
     expect(parseCosts(costsSource)).toHaveLength(19)
   })
 
