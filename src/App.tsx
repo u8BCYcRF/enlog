@@ -48,7 +48,7 @@ function formatYen(amount: number): string {
 }
 
 function sortByDate<T extends { date: string }>(items: T[]): T[] {
-  return [...items].sort((a, b) => {
+  return [...items].reverse().sort((a, b) => {
     if (!a.date && !b.date) return 0
     if (!a.date) return 1
     if (!b.date) return -1
@@ -140,7 +140,7 @@ function Timeline({ entries }: { entries: TimelineEntry[] }) {
     <ol className="timeline-list">
       {chronologicalEntries.map((entry) => (
         <li
-          className={`timeline-item ${entry.daysFromActivityStart === 0 ? 'timeline-start' : ''} ${['予定', '保留'].includes(entry.status) ? 'timeline-open' : ''}`}
+          className={`timeline-item ${entry.daysFromActivityStart === 0 ? 'timeline-start' : ''} ${['予定', '保留', '未確認'].includes(entry.status) ? 'timeline-open' : ''}`}
           key={`${entry.date}-${entry.event}`}
         >
           <div className="timeline-marker" aria-hidden="true">
@@ -270,10 +270,11 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
   const latestRecordedDay = latestEntry?.daysFromActivityStart ?? 0
   const offerEntries = data.timeline.filter((entry) => entry.phase === '申し受け')
   const pendingOfferCount = offerEntries.filter((entry) => entry.status === '保留').length
+  const unconfirmedOfferCount = offerEntries.filter((entry) => entry.status === '未確認').length
 
   const nextActions = useMemo(() => {
     const timelineActions = data.timeline
-      .filter((entry) => ['予定', '保留'].includes(entry.status))
+      .filter((entry) => ['予定', '保留', '未確認'].includes(entry.status))
       .map((entry) => ({
         date: entry.date,
         title: entry.event,
@@ -401,7 +402,7 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
           <MetricCard
             label="申し受け"
             value={`${offerEntries.length}件`}
-            detail={pendingOfferCount ? `${pendingOfferCount}件を保留中` : '保留なし'}
+            detail={`${pendingOfferCount}件保留・${unconfirmedOfferCount}件未確認`}
             tone="coral"
           />
           <MetricCard
@@ -433,11 +434,11 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
                 </div>
                 <h3>{latestEntry.event}</h3>
                 <p>{latestEntry.note || '補足情報はありません。'}</p>
-                {pendingOfferCount > 0 && (
+                {(pendingOfferCount > 0 || unconfirmedOfferCount > 0) && (
                   <div className="attention-note">
                     <span aria-hidden="true">!</span>
                     <p>
-                      {pendingOfferCount}件の申し受けが保留中です。完了情報が記録されるまでは、現在の状態を維持します。
+                      {pendingOfferCount}件が保留中です。{unconfirmedOfferCount}件は対応状況が未確認です。
                     </p>
                   </div>
                 )}
