@@ -271,6 +271,7 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
   const offerEntries = data.timeline.filter((entry) => entry.phase === '申し受け')
   const pendingOfferCount = offerEntries.filter((entry) => entry.status === '保留').length
   const unconfirmedOfferCount = offerEntries.filter((entry) => entry.status === '未確認').length
+  const acceptedOfferCount = offerEntries.filter((entry) => entry.status === '承諾済').length
 
   const nextActions = useMemo(() => {
     const timelineActions = data.timeline
@@ -402,7 +403,7 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
           <MetricCard
             label="申し受け"
             value={`${offerEntries.length}件`}
-            detail={`${pendingOfferCount}件保留・${unconfirmedOfferCount}件未確認`}
+            detail={`${pendingOfferCount}件保留・${acceptedOfferCount}件承諾済`}
             tone="coral"
           />
           <MetricCard
@@ -438,7 +439,8 @@ function Dashboard({ data, onReload, isRefreshing }: { data: DashboardData; onRe
                   <div className="attention-note">
                     <span aria-hidden="true">!</span>
                     <p>
-                      {pendingOfferCount}件が保留中です。{unconfirmedOfferCount}件は対応状況が未確認です。
+                      {pendingOfferCount > 0 && `${pendingOfferCount}件が保留中です。`}
+                      {unconfirmedOfferCount > 0 && `${unconfirmedOfferCount}件は対応状況が未確認です。`}
                     </p>
                   </div>
                 )}
